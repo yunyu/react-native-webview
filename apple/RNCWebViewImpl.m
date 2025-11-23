@@ -145,6 +145,9 @@ RCTAutoInsetsProtocol>
   UIStatusBarStyle _savedStatusBarStyle;
 #endif // !TARGET_OS_OSX
   BOOL _savedStatusBarHidden;
+#if !TARGET_OS_OSX
+  UILongPressGestureRecognizer *_longPressRecognizer;
+#endif // !TARGET_OS_OSX
 
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000 /* __IPHONE_11_0 */
   UIScrollViewContentInsetAdjustmentBehavior _savedContentInsetAdjustmentBehavior;
@@ -512,9 +515,21 @@ RCTAutoInsetsProtocol>
   return wkWebViewConfig;
 }
 
+- (void)didMoveToSuperview
+{
+  if (_webView == nil) {
+      [self initializeWebView];
+  }
+}
+
 - (void)didMoveToWindow
 {
   if (self.window != nil && _webView == nil) {
+      [self initializeWebView];
+  }
+}
+
+- (void)initializeWebView {
     WKWebViewConfiguration *wkWebViewConfig = [self setUpWkWebViewConfig];
     _webView = [[RNCWKWebView alloc] initWithFrame:self.bounds configuration: wkWebViewConfig];
     [self setBackgroundColor: _savedBackgroundColor];
@@ -575,21 +590,28 @@ RCTAutoInsetsProtocol>
     [self setHideKeyboardAccessoryView: _savedHideKeyboardAccessoryView];
     [self setKeyboardDisplayRequiresUserAction: _savedKeyboardDisplayRequiresUserAction];
     [self visitSource];
-  }
+#if !TARGET_OS_OSX
+    [self configureLongPressRecognizer];
+#endif // !TARGET_OS_OSX
+}
 
 #if !TARGET_OS_OSX
+- (void)configureLongPressRecognizer
+{
   // Allow this object to recognize gestures
-  if (self.menuItems != nil) {
+  if (self.menuItems != nil && _longPressRecognizer == nil) {
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(startLongPress:)];
     longPress.delegate = self;
 
     longPress.minimumPressDuration = 0.4f;
     longPress.numberOfTouchesRequired = 1;
     longPress.cancelsTouchesInView = YES;
+
+    _longPressRecognizer = longPress;
     [self addGestureRecognizer:longPress];
   }
-#endif // !TARGET_OS_OSX
 }
+#endif // !TARGET_OS_OSX
 
 // Update webview property when the component prop changes.
 - (void)setAllowsBackForwardNavigationGestures:(BOOL)allowsBackForwardNavigationGestures {
