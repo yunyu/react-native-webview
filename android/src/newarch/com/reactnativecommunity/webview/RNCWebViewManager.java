@@ -338,6 +338,12 @@ public class RNCWebViewManager extends ViewGroupManager<RNCWebViewWrapper>
         mRNCWebViewManagerImpl.setPaymentRequestEnabled(view, value);
     }
 
+    @Override
+    @ReactProp(name = "offscreenPreRaster")
+    public void setOffscreenPreRaster(RNCWebViewWrapper view, boolean value) {
+        mRNCWebViewManagerImpl.setOffscreenPreRaster(view, value);
+    }
+
     /* iOS PROPS - no implemented here */
     @Override
     public void setAllowingReadAccessToURL(RNCWebViewWrapper view, @Nullable String value) {}

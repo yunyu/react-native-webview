@@ -721,4 +721,11 @@ class RNCWebViewManagerImpl(private val newArch: Boolean = false) {
             WebSettingsCompat.setPaymentRequestEnabled(view.settings, enabled)
         }
     }
+
+    fun setOffscreenPreRaster(viewWrapper: RNCWebViewWrapper, enabled: Boolean) {
+        val view = viewWrapper.webView
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.OFF_SCREEN_PRERASTER)) {
+            WebSettingsCompat.setOffscreenPreRaster(view.settings, enabled)
+        }
+    }
 }

@@ -1168,6 +1168,18 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    * @platform android
    */
   onLoadSubResourceError?: (event: WebViewErrorEvent) => void;
+
+  /**
+   * Boolean value that controls whether the WebView should pre-rasterize
+   * its content when it is offscreen but attached to a window.
+   * Enabling this can prevent rendering artifacts during animations
+   * that bring an offscreen WebView into view.
+   * Note: This increases memory usage. Use sparingly and ensure the WebView
+   * size does not exceed the device screen size.
+   * Default is false.
+   * @platform android
+   */
+  offscreenPreRaster?: boolean;
 }
 
 export interface WebViewSharedProps extends ViewProps {
