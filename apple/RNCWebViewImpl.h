@@ -144,6 +144,7 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *)request
 - (void)stopLoading;
 - (void)requestFocus;
 - (void)clearCache:(BOOL)includeDiskFiles;
+- (void)initializeWebView;
 - (void)destroyWebView;
 #if !TARGET_OS_OSX
 - (void)addPullToRefreshControl;

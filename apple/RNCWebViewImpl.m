@@ -490,9 +490,9 @@ RCTAutoInsetsProtocol>
   return wkWebViewConfig;
 }
 
-- (void)didMoveToWindow
+- (void)initializeWebView
 {
-  if (self.window != nil && _webView == nil) {
+  if (_webView == nil) {
     WKWebViewConfiguration *wkWebViewConfig = [self setUpWkWebViewConfig];
     _webView = [[RNCWKWebView alloc] initWithFrame:self.bounds configuration: wkWebViewConfig];
     [self setBackgroundColor: _savedBackgroundColor];
@@ -556,6 +556,13 @@ RCTAutoInsetsProtocol>
     [self setHideKeyboardAccessoryView: _savedHideKeyboardAccessoryView];
     [self setKeyboardDisplayRequiresUserAction: _savedKeyboardDisplayRequiresUserAction];
     [self visitSource];
+  }
+}
+
+- (void)didMoveToWindow
+{
+  if (self.window != nil && _webView == nil) {
+    [self initializeWebView];
   }
 
 #if !TARGET_OS_OSX

@@ -70,6 +70,14 @@ static inline std::string nullSafeStringWithLength(id value) {
     return concreteComponentDescriptorProvider<RNCWebViewComponentDescriptor>();
 }
 
+- (void)finalizeUpdates:(RNComponentViewUpdateMask)updateMask {
+    [super finalizeUpdates:updateMask];
+    // Fabric keeps contentView attached when recycling this component. A reused
+    // hidden view therefore gets no didMoveToSuperview or didMoveToWindow call.
+    // Recreate it after the new props and event emitter have been applied.
+    [_view initializeWebView];
+}
+
 // Reproduce the idea from here: https://github.com/facebook/react-native/blob/8bd3edec88148d0ab1f225d2119435681fbbba33/React/Fabric/Mounting/ComponentViews/InputAccessory/RCTInputAccessoryComponentView.mm#L142
 - (void)prepareForRecycle {
     [super prepareForRecycle];
