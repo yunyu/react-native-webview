@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 
 import {
+  findNodeHandle,
   Image,
   View,
   ImageSourcePropType,
@@ -160,6 +161,10 @@ const WebViewComponent = forwardRef<unknown, AndroidWebViewProps>(
         clearFormData: () => webViewRef.current && Commands.clearFormData(webViewRef.current),
         clearCache: (includeDiskFiles: boolean) =>
           webViewRef.current && Commands.clearCache(webViewRef.current, includeDiskFiles),
+        terminateRenderer: () => {
+          const tag = findNodeHandle(webViewRef.current);
+          if (tag != null) RNCWebViewModule.terminateRenderer?.(tag);
+        },
         clearHistory: () => webViewRef.current && Commands.clearHistory(webViewRef.current),
       }),
       [setViewState, webViewRef],

@@ -8,6 +8,10 @@
 
 RCT_EXPORT_MODULE(RNCWebViewModule)
 
+RCT_EXPORT_METHOD(terminateRenderer:(double)reactTag) {
+    // Android-only operation.
+}
+
 RCT_EXPORT_METHOD(isFileUploadSupported:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     if (resolve) {
         resolve(@(YES));

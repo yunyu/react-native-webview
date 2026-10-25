@@ -60,6 +60,11 @@ declare class WebView<P = {}> extends Component<WebViewProps & P> {
    * Tells this WebView to clear its internal back/forward list.
    */
   clearHistory?: () => void;
+
+  /** Android API 29+: terminate the renderer. Recreate the WebView in onRenderProcessGone.
+   * No-op on older native binaries. Other WebViews sharing the renderer are also affected.
+   */
+  terminateRenderer?: () => void;
 }
 
 export { WebView };

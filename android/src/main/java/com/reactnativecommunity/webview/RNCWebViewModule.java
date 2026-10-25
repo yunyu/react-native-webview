@@ -60,6 +60,21 @@ public class RNCWebViewModule extends NativeRNCWebViewModuleSpec implements Acti
         reactContext.addActivityEventListener(this);
     }
 
+    @Override
+    public void terminateRenderer(double reactTag) {
+        if (Build.VERSION.SDK_INT < 29) return;
+        com.facebook.react.bridge.UiThreadUtil.runOnUiThread(() -> {
+            com.facebook.react.bridge.UIManager manager =
+                com.facebook.react.uimanager.UIManagerHelper.getUIManagerForReactTag(mContext, (int) reactTag);
+            if (manager == null) return;
+            android.view.View view = manager.resolveView((int) reactTag);
+            if (!(view instanceof RNCWebViewWrapper)) return;
+            android.webkit.WebViewRenderProcess renderer =
+                ((RNCWebViewWrapper) view).getWebView().getWebViewRenderProcess();
+            if (renderer != null) renderer.terminate();
+        });
+    }
+
     @NonNull
     @Override
     public String getName() {
